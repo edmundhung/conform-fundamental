@@ -24,15 +24,18 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-	const hasBonusForm = useFormData(
+	const isBonusFormRendered = useFormData(
 		"bonus",
 		(formData: FormData | null) => formData !== null
 	);
-	const isBonusFormdirty = useFormData("bonus", (formData: FormData | null) => {
-		if (!formData) return false;
+	const isBonusFormCompleted = useFormData(
+		"bonus",
+		(formData: FormData | null) => {
+			if (!formData) return false;
 
-		return Array.from(formData.values()).every((value) => value !== "");
-	});
+			return Array.from(formData.values()).every((value) => value !== "");
+		}
+	);
 
 	return (
 		<html lang="en">
@@ -47,12 +50,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 					<div className="flex flex-col items-center justify-between gap-16">
 						{children}
 					</div>
-					{hasBonusForm ? (
+					{isBonusFormRendered ? (
 						<div className="fixed bottom-0 p-8">
 							<button
 								className="border p-8 border-orange-500 disabled:opacity-25"
 								form="bonus"
-								disabled={!isBonusFormdirty}
+								disabled={!isBonusFormCompleted}
 							>
 								Buy it now
 							</button>
